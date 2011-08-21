@@ -31,7 +31,7 @@ sub getsetup () {
 }
 
 # ensure user-defined pagespec aliases are composed of word-characters only
-sub safe_key() {
+sub safe_key {
   my $key = shift;
   return 1 if $key =~ /^\w+$/;
   0;

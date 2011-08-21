@@ -27,14 +27,21 @@ sub getsetup () {
         },
 }
 
+# ensure user-defined pagespec aliases are composed of word-characters only
+sub safe_key() {
+  my $key = shift;
+  return 1 if $key =~ /^\w+$/;
+  0;
+}
+
 sub checkconfig () {
     no strict 'refs';
     no warnings 'redefine';
 
     if ($config{pagespec_aliases}) {
         foreach my $key (keys %{$config{pagespec_aliases}}) {
+	    next unless safe_key($key);
             my $value = ${$config{pagespec_aliases}}{$key};
-            # XXX: validate key?
             my $subname = "IkiWiki::PageSpec::match_$key";
             *{ $subname } = sub {
               my $path = shift;

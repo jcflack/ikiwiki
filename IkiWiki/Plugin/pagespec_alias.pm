@@ -1,4 +1,7 @@
 package IkiWiki::Plugin::pagespec_alias;
+# Copyright © 2011 Jon Dowland <jmtd@debian.org>
+# Licensed under the GNU GPL, version 2, or any later version published by the
+# Free Software Foundation
 
 use warnings;
 use strict;

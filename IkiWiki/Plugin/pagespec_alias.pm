@@ -1,4 +1,4 @@
-package IkiWiki::Plugin::alias;
+package IkiWiki::Plugin::pagespec_alias;
 
 use warnings;
 use strict;
@@ -6,8 +6,8 @@ use IkiWiki '3.00';
 use File::Basename;
 
 sub import {
-  hook(type => "getsetup", id=> "alias", call => \&getsetup);
-  hook(type => "checkconfig", id=> "alias", call => \&checkconfig);
+  hook(type => "getsetup", id=> "pagespec_alias", call => \&getsetup);
+  hook(type => "checkconfig", id=> "pagespec_alias", call => \&checkconfig);
 }
 
 sub getsetup () {

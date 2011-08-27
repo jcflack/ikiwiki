@@ -16,15 +16,15 @@ sub import {
 sub getsetup () {
     return
         plugin => {
-            description => "description of this plugin",
-            safe => 1,
+            description => "define aliases to pagespecs to ease re-use",
+            safe => 0,
             rebuild => 1,
             section => "misc",
         },
         pagespec_aliases => {
             type => "string",
-            example => {"hello" => "hi" },
-            description => "option bar",
+            example => "image: *.png or *.jpg or *.gif",
+            description => "a list of mappings, alias to pagespec",
             safe => 1,
             rebuild => 0,
         },

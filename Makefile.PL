@@ -69,7 +69,7 @@ underlay_install:
 	install -d $(DESTDIR)$(PREFIX)/share/ikiwiki
 	for dir in `cd underlays && $(FIND) . -follow -type d`; do \
 		install -d $(DESTDIR)$(PREFIX)/share/ikiwiki/$$dir; \
-		for file in `$(FIND) underlays/$$dir -follow -maxdepth 1 -type f`; do \
+		for file in `$(FIND) underlays/$$dir -follow -maxdepth 1 -type f -not -name \\*.full.js -not -name \\*.full.css`; do \
 			cp -aL $$file $(DESTDIR)$(PREFIX)/share/ikiwiki/$$dir 2>/dev/null || \
 			install -m 644 $$file $(DESTDIR)$(PREFIX)/share/ikiwiki/$$dir; \
 		done; \
@@ -154,6 +154,13 @@ extra_install: underlay_install
 	-install -m 0644 wikilist $(DESTDIR)/etc/ikiwiki
 	-install -m 0644 auto.setup $(DESTDIR)/etc/ikiwiki
 	-install -m 0644 auto-blog.setup $(DESTDIR)/etc/ikiwiki
+
+# The git/hg plugins want to chdir; so does Devel::Cover. Skip those tests
+# to stop them hurting each other.
+coverage:
+	cover -delete
+	$(MAKE) test PERL5OPT=-MDevel::Cover PERL5LIB=. TEST_FILES="$(filter-out t/git.t t/mercurial.t,$(wildcard t/*.t))"
+	cover
 }
 }
 

@@ -51,13 +51,8 @@ sub getsetup () {
 }
 
 sub checkconfig () {
-
 	eval q{use highlight};
-	if ($@) {
-		print STDERR "Failed to load highlight. Configuring anyway.\n";
-	};
-
-	if (highlight::DataDir->can('new')){
+	if (highlight::DataDir->can('new')) {
 		$data_dir=new highlight::DataDir();
 		$data_dir->searchDataDir("");
 	} else {

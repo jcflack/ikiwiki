@@ -305,9 +305,9 @@ sub getsetup () {
 		rebuild => 0,
 	},
 	umask => {
-		type => "integer",
-		example => "022",
-		description => "force ikiwiki to use a particular umask",
+		type => "string",
+		example => "public",
+		description => "force ikiwiki to use a particular umask (keywords public, group or private, or a number)",
 		advanced => 1,
 		safe => 0, # paranoia
 		rebuild => 0,
@@ -587,7 +587,23 @@ sub checkconfig () {
 		unless exists $config{wikistatedir} && defined $config{wikistatedir};
 
 	if (defined $config{umask}) {
-		umask(possibly_foolish_untaint($config{umask}));
+		my $u = possibly_foolish_untaint($config{umask});
+
+		if ($u =~ m/^\d+$/) {
+			umask($u);
+		}
+		elsif ($u eq 'private') {
+			umask(077);
+		}
+		elsif ($u eq 'group') {
+			umask(027);
+		}
+		elsif ($u eq 'public') {
+			umask(022);
+		}
+		else {
+			error(sprintf(gettext("unsupported umask setting %s"), $u));
+		}
 	}
 
 	run_hooks(checkconfig => sub { shift->() });
@@ -2792,6 +2808,7 @@ sub cmp_title {
 	IkiWiki::pagetitle(IkiWiki::basename($b))
 }
 
+sub cmp_path { IkiWiki::pagetitle($a) cmp IkiWiki::pagetitle($b) }
 sub cmp_mtime { $IkiWiki::pagemtime{$b} <=> $IkiWiki::pagemtime{$a} }
 sub cmp_age { $IkiWiki::pagectime{$b} <=> $IkiWiki::pagectime{$a} }
 

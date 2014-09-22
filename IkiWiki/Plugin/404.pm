@@ -11,6 +11,7 @@ use IkiWiki 3.00;
 sub import {
 	hook(type => "cgi", id => '404',  call => \&cgi);
 	hook(type => "getsetup", id => '404',  call => \&getsetup);
+	hook(type => "checkconfig", id => '404',  call => \&registerenvkeys);
 	IkiWiki::loadplugin("goto");
 }
 
@@ -24,6 +25,18 @@ sub getsetup () {
 			rebuild => 0,
 			section => "web",
 		}
+}
+
+sub registerenvkeys () {
+	foreach my $wrapper (@{$config{wrappers}}) {
+		my %wcfg = %{$wrapper};
+		if ( $wcfg{cgi} ) {
+			push @{$wcfg{needenvkeys}}, qw(
+				REDIRECT_STATUS
+				REDIRECT_URL
+			);
+		}
+	}
 }
 
 sub cgi_page_from_404 ($$$) {

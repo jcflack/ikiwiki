@@ -10,21 +10,35 @@ use open qw{:utf8 :std};
 use Encode;
 
 sub neededenvkeys() {
-	return [ qw{
+	return [
+		# RFC 3875:
+		qw(
+		AUTH_TYPE
 		CONTENT_LENGTH
+	        CONTENT_TYPE
 		GATEWAY_INTERFACE
-		HTTPS
-		HTTP_ACCEPT
-		HTTP_COOKIE
-		HTTP_HOST
+		PATH_INFO
+		PATH_TRANSLATED
 		QUERY_STRING
 		REMOTE_ADDR
+		REMOTE_HOST
+		REMOTE_IDENT
 		REMOTE_USER
 		REQUEST_METHOD
-		REQUEST_URI
+		SCRIPT_NAME
+		SERVER_NAME
 		SERVER_PORT
-	        CONTENT_TYPE
-	} ];
+		SERVER_PROTOCOL
+		SERVER_SOFTWARE
+		),
+		# incomplete set of protocol-specific keys RFC 3875 alludes to:
+		# for HTTP (might need more of these if doing fancier stuff):
+		qw( HTTP_ACCEPT HTTP_COOKIE HTTP_HOST ),
+		# for HTTPS (needed in printheader below):
+		qw( HTTPS ),
+		# non-RFC, Apache et al. extension:
+		qw( REQUEST_URI ),
+	];
 }
 
 sub printheader ($) {

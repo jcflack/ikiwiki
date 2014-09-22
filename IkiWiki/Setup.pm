@@ -116,10 +116,12 @@ sub merge ($) {
 	}
 	
 	if (length $config{cgi_wrapper}) {
+		require IkiWiki::CGI;
 		push @{$config{wrappers}}, {
 			cgi => 1,
 			wrapper => $config{cgi_wrapper},
 			wrappermode => (defined $config{cgi_wrappermode} ? $config{cgi_wrappermode} : "06755"),
+			needenvkeys => IkiWiki::neededenvkeys(),
 		};
 	}
 }

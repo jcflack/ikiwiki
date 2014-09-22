@@ -47,11 +47,10 @@ sub gen_wrapper () {
 	delete $config{wrapper};
 	
 	my @envsave;
-	push @envsave, qw{REMOTE_ADDR QUERY_STRING REQUEST_METHOD REQUEST_URI
-	               CONTENT_TYPE CONTENT_LENGTH GATEWAY_INTERFACE
-		       HTTP_COOKIE REMOTE_USER HTTPS REDIRECT_STATUS
-		       HTTP_HOST SERVER_PORT HTTPS HTTP_ACCEPT
-		       REDIRECT_URL} if $config{cgi};
+	if ( $config{needenvkeys} ) {
+		@envsave = keys(%{{map {$_ => 1} @{$config{needenvkeys}}}});
+		delete $config{needenvkeys};
+	}
 	my $envsize=$#envsave;
 	my $envsave="";
 	foreach my $var (@envsave) {

@@ -9,6 +9,14 @@ use IkiWiki::UserInfo;
 use open qw{:utf8 :std};
 use Encode;
 
+sub neededenvkeys() {
+	return [ qw{REMOTE_ADDR QUERY_STRING REQUEST_METHOD REQUEST_URI
+	            CONTENT_TYPE CONTENT_LENGTH GATEWAY_INTERFACE
+		    HTTP_COOKIE REMOTE_USER HTTPS REDIRECT_STATUS
+		    HTTP_HOST SERVER_PORT HTTPS HTTP_ACCEPT
+		    REDIRECT_URL} ];
+}
+
 sub printheader ($) {
 	my $session=shift;
 	
@@ -394,7 +402,7 @@ sub cgi_getsession ($) {
 # can be stored on a form. This function will check
 # (for logged in users) that the sid on the form matches
 # the session id in the cookie.
-sub checksessionexpiry ($$) {
+sub checksessionexpiry ($$;$) {
 	my $q=shift;
 	my $session = shift;
 

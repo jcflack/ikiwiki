@@ -23,7 +23,7 @@ sub getsetup () {
         },
         pagespec_aliases => {
             type => "string",
-            example => "image: *.png or *.jpg or *.gif",
+            example => { image => "*.png or *.jpg or *.gif" },
             description => "a list of mappings, alias to pagespec",
             safe => 1,
             rebuild => 0,

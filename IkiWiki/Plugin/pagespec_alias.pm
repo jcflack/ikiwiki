@@ -48,7 +48,8 @@ sub checkconfig () {
             my $subname = "IkiWiki::PageSpec::match_$key";
             *{ $subname } = sub {
               my $path = shift;
-              return IkiWiki::pagespec_match($path, $value);
+              shift;
+              return IkiWiki::pagespec_match($path, $value, @_);
             }
         }
     }
